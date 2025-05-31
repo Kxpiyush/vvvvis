@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIS Visa Auto Rescheduler</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="css/styles.css"></link>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mt-2 mb-0">AIS Visa Auto Rescheduler<br><span id="version"></span></h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h3 class="my-2" id="credits">50</h3>
+                <p class="my-2 text-center">Credits left.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="mt-2">
+                    <div class="form-check form-switch" style="text-align: left;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="activate">
+                        <label class="form-check-label" for="activate">Activate the script</label>
+                    </div>
+                </div>
+                <div class="my-2">
+                    <div class="form-check form-switch" style="text-align: left;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="autobook">
+                        <label class="form-check-label" for="autobook">Enable Autobook</label>
+                    </div>
+                </div>
+                <div class="my-2 text-start">
+                    <input type="range" id="frequency" name="frequency" min="0.5" max="120" step="0.5">
+                    <label for="frequency">Frequency of checks (every <span id="checkfrequency">1</span> minutes)</label>
+                </div>
+                <div class="my-2 hidden">
+                    <input type="range" id="gap" name="gap" min="0" value="3" max="30" step="1">
+                    <label for="gap">Check availability from <span id="daygap">3</span> days from today. [0 = today]</label>
+                </div>
+                <p class="my-2 text-start">Below fields are autofilled from your current settings. You can change the start date and end date to make the autoscheduler look only for slots between these dates.</p>
+                <div class="my-2 text-start">
+                    <label for="start">Start Date</label>
+                    <input type="date" id="start">
+                </div>
+                <div class="my-2 text-start">
+                    <label for="end">End Date</label>
+                    <input type="date" id="end">
+                </div>
+                <p class="my-2 text-start">Changes are autosaved.</p>
+                <form class="my-2" name="ais_visa_info" id="ais_visa_info">
+                    <div class="d-grid">
+                        <button id="reset_info" type="submit" class="btn btn-danger btn-sm">Configure / Reset</button>
+                    </div>
+                </form>
+                <p class="my-2 text-center">
+                    <button id=read_faqs form=null class="btn btn-info btn-sm">Read FAQs</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <a id='payment_link' href='#' target='_blank' style="background: #40d3a5;height: 36px;display: flex;justify-content: center;">
+        <img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi4.png?v=3' border='0' alt='Buy Me a Coffee' />
+    </a>
+    <script src="js/content.js"></script>
+</body>
+
+</html>

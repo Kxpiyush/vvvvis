@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AIS Visa Scheduler FAQs</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #1e3b4d;
+        }
+        
+        section {
+            font-family: Helvetica, Arial, system-ui, ui-sans-serif;
+        }
+        
+        .accordian-element {
+            background: white;
+        }
+        
+        .accordion-button {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .accordion-button.collapsed {
+            text-decoration: underline;
+            text-underline-offset: .5em;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="container mt-5">
+        <div class="accordion" id="faqs-accordion">
+            <div class="accordian-element">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-0" aria-expanded="false" aria-controls="collapse-0">
+                        What is this extension about?
+                    </button>
+                </h2>
+                <div id="collapse-0" class="accordion-collapse collapse" data-bs-parent="#faqs-accordion">
+                    <p class="accordion-body m-0">
+                        This extension was born out of boredom and the ridiculous task of clicking through multiple months to find the next available date for rescheduling. I wanted to build something to click through the calendar but ended up building the extension which automates
+                        everything.
+                    </p>
+                </div>
+            </div>
+            <div class="accordian-element">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
+                        Who can use this extension?
+                    </button>
+                </h2>
+                <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#faqs-accordion">
+                    <p class="accordion-body m-0">
+                        This extension is designed to work for the AIS VISA application system only—which means only the countries listed here (<a href='https://ais.usvisa-info.com/en-us/countries_list/niv'>https://ais.usvisa-info.com/en-us/countries_list/niv</a>)
+                        will work with this extension. Also, this is only for rescheduling your appointment. If you are looking to schedule it for the first time, this extension will not work.
+                    </p>
+                </div>
+            </div>
+            <div class="accordian-element">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+                        How does this extension work?
+                    </button>
+                </h2>
+                <div id="collapse-2" class="accordion-collapse collapse" data-bs-parent="#faqs-accordion">
+                    <p class="accordion-body m-0">
+                        The extension automates all the clicking and navigating that you'll generally do manually. It uses your current appointment date and periodically checks for any date earlier than it and tries to book it automatically.<br />The
+                        extension uses credits every time it finds any date. Only when you are in a soft block or a hard block, the credits are not used.
+                    </p>
+                </div>
+            </div>
+            <div class="accordian-element">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                        Soft block? Hard block? You're scaring me. What are these?
+                    </button>
+                </h2>
+                <div id="collapse-3" class="accordion-collapse collapse" data-bs-parent="#faqs-accordion">
+                    <p class="accordion-body m-0">
+                        <strong>Soft block</strong>:<br />The AIS system shows you no slots for 5 hours when you check for the slots a certain number of times. Sometimes this is 70 checks and sometimes it is only 20. The extension identifies this and
+                        automatically adjusts the checking interval to prevent a hard block.<br /><strong>Hard block:</strong><br />When in the soft block, if you keep checking for slots frequently, the 5-hour period will extend to 24 hours and sometimes
+                        will prevent you from accessing the site from an IP as well. it is best to stay out of this hard block state.<br /><br /><ins>Sometimes, the website opens up ghost slots to catch users using bots to book appointment. When such slots open up, you'll see errors telling you to that your selection is invalid. If this error happens three times in a row, stop using the extension for a couple of hours.</ins>
+                    </p>
+                </div>
+            </div>
+            <div class="accordian-element">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+                        Alright, how do I use this extension?
+                    </button>
+                </h2>
+                <div id="collapse-4" class="accordion-collapse collapse" data-bs-parent="#faqs-accordion">
+                    <p class="accordion-body m-0">
+                        The extension is intuitive to use. It'll show you dialogs for you to act on or provide information. Apart from that you can control things like checking frequency and other options. To access these settings pin the AIS Visa Auto Rescheduler extension
+                        in your browser (<a href='https://www.youtube.com/watch?v=lYwGngJS7og&t=33s' target='_blank'>How to pin extension</a>). Changes done here are autosaved.<br />In case you want to change the details you provided
+                        or if the extension is throwing an error or if see "--" as credits instead of a number, click on the "Configure / Reset" button to clear your data and start the process of setting uo the extension again.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="../js/bootstrap.min.js"></script>
+</body>
+
+</html>

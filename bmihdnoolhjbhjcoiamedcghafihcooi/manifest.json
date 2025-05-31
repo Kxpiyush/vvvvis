@@ -1,0 +1,47 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "manifest_version": 3,
+  "name": "AIS Visa Auto Rescheduler",
+  "version": "3.4.1.4",
+  "description": "This extension reschedules US Visa application appointment to an earlier date automatically.",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "notifications",
+    "declarativeContent"
+  ],
+  "background": {
+    "service_worker": "/js/background.js"
+  },
+  "host_permissions": [
+    "https://ais.usvisa-info.com/*"
+  ],
+  "externally_connectable": {
+    "matches": [
+      "https://ais.usvisa-info.com/*"
+    ]
+  },
+  "action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://ais.usvisa-info.com/*"
+      ],
+      "js": [
+        "/js/rescheduler.js",
+        "/js/sweetalert.js"
+      ],
+      "css": [
+        "/css/sweetalert.css"
+      ]
+    }
+  ],
+  "incognito": "spanning"
+}
