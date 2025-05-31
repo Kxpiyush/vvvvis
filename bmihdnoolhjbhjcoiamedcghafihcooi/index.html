@@ -5,58 +5,59 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIS Visa Auto Rescheduler</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css"></link>
-    <link rel="stylesheet" href="css/styles.css"></link>
+    <title>Visa Looker</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h4 class="mt-2 mb-0">AIS Visa Auto Rescheduler<br><span id="version"></span></h4>
+                <div class="header-section text-center">
+                    <img src="https://images.pexels.com/photos/2078076/pexels-photo-2078076.jpeg?auto=compress&cs=tinysrgb&w=50" alt="Visa Looker Logo" class="logo mb-2">
+                    <h4 class="mb-3">Visa Looker<br><span id="version" class="text-muted"></span></h4>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="mt-2">
-                    <div class="form-check form-switch" style="text-align: left;">
+                <div class="control-section">
+                    <div class="form-check form-switch custom-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="activate">
-                        <label class="form-check-label" for="activate">Activate the script</label>
+                        <label class="form-check-label" for="activate">Start Looking</label>
                     </div>
-                </div>
-                <div class="my-2">
-                    <div class="form-check form-switch" style="text-align: left;">
+                    <div class="form-check form-switch custom-switch mt-3">
                         <input class="form-check-input" type="checkbox" role="switch" id="autobook">
-                        <label class="form-check-label" for="autobook">Enable Autobook</label>
+                        <label class="form-check-label" for="autobook">Auto Book</label>
                     </div>
                 </div>
-                <div class="my-2 text-start">
-                    <input type="range" id="frequency" name="frequency" min="0.5" max="120" step="0.5">
-                    <label for="frequency">Frequency of checks (every <span id="checkfrequency">1</span> minutes)</label>
-                </div>
-                <div class="my-2 hidden">
-                    <input type="range" id="gap" name="gap" min="0" value="3" max="30" step="1">
-                    <label for="gap">Check availability from <span id="daygap">3</span> days from today. [0 = today]</label>
-                </div>
-                <p class="my-2 text-start">Below fields are autofilled from your current settings. You can change the start date and end date to make the autoscheduler look only for slots between these dates.</p>
-                <div class="my-2 text-start">
-                    <label for="start">Start Date</label>
-                    <input type="date" id="start">
-                </div>
-                <div class="my-2 text-start">
-                    <label for="end">End Date</label>
-                    <input type="date" id="end">
-                </div>
-                <p class="my-2 text-start">Changes are autosaved.</p>
-                <form class="my-2" name="ais_visa_info" id="ais_visa_info">
-                    <div class="d-grid">
-                        <button id="reset_info" type="submit" class="btn btn-danger btn-sm">Configure / Reset</button>
+                <div class="settings-section mt-4">
+                    <div class="frequency-control">
+                        <label for="frequency" class="form-label">Check Every <span id="checkfrequency">1</span> Minutes</label>
+                        <input type="range" class="form-range" id="frequency" name="frequency" min="0.5" max="120" step="0.5">
                     </div>
-                </form>
-                <p class="my-2 text-center">
-                    <button id=read_faqs form=null class="btn btn-info btn-sm">Read FAQs</button>
-                </p>
+                    <div class="date-section mt-4">
+                        <h6 class="section-title">Date Range</h6>
+                        <p class="text-muted small">Set your preferred date range for appointment search</p>
+                        <div class="mb-3">
+                            <label for="start" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="start">
+                        </div>
+                        <div class="mb-3">
+                            <label for="end" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="end">
+                        </div>
+                    </div>
+                </div>
+                <div class="action-section mt-4">
+                    <form name="ais_visa_info" id="ais_visa_info">
+                        <div class="d-grid gap-2">
+                            <button id="reset_info" type="submit" class="btn btn-primary">Reset Settings</button>
+                            <button id="read_faqs" type="button" class="btn btn-outline-info">Help Guide</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -3,12 +3,18 @@
     src: url(../fonts/Quicksand.ttf);
 }
 
- :root {
-    --font-fallback: BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-sans;
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --background-color: #f8fafc;
+    --text-color: #1e293b;
+    --border-color: #e2e8f0;
+    --font-fallback: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 * {
     font-family: "Quicksand", var(--font-fallback);
+    color: var(--text-color);
 }
 
 html {
@@ -16,28 +22,101 @@ html {
 }
 
 body {
-    background: #fdf8ea;
-    text-align: center;
+    background: var(--background-color);
+    padding: 1rem;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: bold;
+.header-section {
+    margin-bottom: 2rem;
 }
 
-p,
-label {
-    font-size: 0.9em;
-    line-height: 1.5rem;
-    width: 100%;
+.logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    object-fit: cover;
 }
 
-input {
-    width: 100%;
+h4 {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.control-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.custom-switch {
+    padding-left: 3rem;
+}
+
+.form-check-input {
+    width: 3em;
+    height: 1.5em;
+    margin-left: -3em;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.settings-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-range {
+    height: 1.5rem;
+}
+
+.form-range::-webkit-slider-thumb {
+    background: var(--primary-color);
+}
+
+.form-control {
+    border-color: var(--border-color);
+    padding: 0.75rem;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-info {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-info:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.text-muted {
+    color: #64748b !important;
 }
 
 .hidden {
