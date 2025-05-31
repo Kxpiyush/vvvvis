@@ -54,12 +54,7 @@
         $end = null,
         $active = true,
         $failed = false,
-        $resets = 0,
-        $to = "test@test.com",
-        $pl = "#",
-        $timer = 0,
-        $sync = 5,
-        $host = "https://ais-visa-auto-scheduler.onrender.com";
+        $timer = 0;
 
     async function getNewDate($delay, $center, $ascCenter) {
         $timer = $delay;
@@ -69,9 +64,8 @@
             nowInLocale = now.toLocaleString(),
             center = $center || document.getElementById("appointments_consulate_appointment_facility_id").value,
             ascCenter = $ascCenter ? $ascCenter : (document.getElementById("appointments_asc_appointment_facility_id") ? document.getElementById("appointments_asc_appointment_facility_id").value : null),
-            [$dates, $credits, $frequency, start, end, $autobook] = await Promise.all([
+            [$dates, $frequency, start, end, $autobook] = await Promise.all([
                 fetch(`${page}/days/${center}.json?appointments[expedite]=false`, { headers }).then(d => d.json()).catch(e => null),
-                chrome.storage.local.get("__cr").then(cr => cr.__cr),
                 chrome.storage.local.get("__fq").then(fq => fq.__fq),
                 chrome.storage.local.get("__st").then(st => st.__st),
                 chrome.storage.local.get("__en").then(en => en.__en),
@@ -109,32 +103,10 @@
 
         $failed = false;
 
-        if (!$credits || $credits <= 0) {
-            chrome.storage.local.set({ "__cr": Math.max(--$credits, 0) }).then(d => sync(true));
-
-            return Swal.fire({
-                title: "Attention please.",
-                html: "You're out of credits. Please " + ($resets == 0 ? "contact the developer to recharge. Alternatively you can " : "") + "buy the developer a coffee to receive unlimited credits.",
-                icon: "warning",
-                showDenyButton: $resets == 0,
-                confirmButtonText: $resets == 0 ? "Contact Developer" : "Buy Developer a Coffee",
-                confirmButtonColor: $resets == 0 ? "#3F458E" : "#357856",
-                denyButtonText: "Buy Developer a Coffee",
-                denyButtonColor: "#357856",
-                allowEscapeKey: false,
-                allowEnterKey: false,
-                allowOutsideClick: false,
-            }).then(async action => {
-                return window.open((action.isDenied || $resets != 0) ? $pl : `mailto:${$to}`);
-            });
-        }
-
         if ($dates.length == 0) {
             toast(`<span style="color: red;">No dates found. You are in a soft ban. To prevent a hard ban/IP ban, next check will happen after 30 minutes.</span><br><span style="color: yellow;">Checked for dates between ${start} and ${end} @ ${nowInLocale}</span><br><span style="color: orange">Your current appointment is on ${$apptDate}</span>`)
             return getNewDate(1000 * 60 * 31, center, ascCenter);
         }
-
-        chrome.storage.local.set({ "__cr": Math.max(--$credits, 0) });
 
         let latestDate = $dates.map(d => d.date).sort((a, b) => new Date(a) - new Date(b)).find(d => dateValidityCheck(start, end, d));
 
@@ -195,54 +167,6 @@
         }
     }
 
-    async function sync(force) {
-        let citySelect = document.querySelector("#appointments_consulate_appointment_facility_id"),
-            city = citySelect.querySelectorAll("option")[citySelect.selectedIndex].innerText,
-            email = $username,
-            date = $apptDate,
-            appointment = $appid;
-
-        if (date == null || date == "" || date == undefined || !date)
-            date = await chrome.storage.local.get("__ad").then(ad => ad.__ad);
-
-        await chrome.storage.local.get("__cr")
-            .then(cr => fetch($host + "/set-credits", {
-                method: "POST",
-                body: JSON.stringify({ email, city, cityId: citySelect.value, appointment, version: $version, date, credits: cr.__cr }),
-                headers: { "Content-type": "application/json; charset=UTF-8" }
-            }))
-            .then(async res => {
-                if (!res.ok) throw await res.text();
-                return res.json();
-            })
-            .then(data => {
-                chrome.storage.local.set({ __cr: data.__cr });
-                chrome.storage.local.set({ __pl: data.__pl });
-                $host = data.__host;
-                $to = data.__to;
-                $pl = data.__pl;
-                $sync = data.__sync;
-                $resets = data.__resets;
-            })
-            .catch(async(error) => {
-                await Swal.fire({
-                    title: "Attention please.",
-                    html: error + "<br><br>To prevent an infinite loop, the extension will turn itself off and log you out now.",
-                    allowEscapeKey: false,
-                    allowEnterKey: false,
-                    allowOutsideClick: false,
-                    icon: "errpr",
-                    confirmButtonText: "Ok"
-                });
-                await chrome.storage.local.clear();
-                await chrome.storage.local.set({ __ab: false, __ap: false, __cr: 0, __fq: 1, __gp: 7 });
-                return location.href = page.replace(/\/schedule.*/g, "/users/sign_out");
-            });
-
-        if (!force)
-            delay(Math.max($timer, $sync * 60 * 1000)).then(d => sync());
-    };
-
     async function init() {
         let isSignIn = !!page.match(/^\/[a-z]{2}-[a-z]{2}\/(n|)iv\/users\/sign_in/),
             isLoggedOut = !!page.match(/^\/[a-z]{2}-[a-z]{2}\/(n|)iv$/),
@@ -251,10 +175,6 @@
             isConfirmation = !!page.match(/^\/[a-z]{2}-[a-z]{2}\/(n|)iv\/schedule\/\d{1,}\/appointment\/instructions$/),
             isNotEnglish = (isSignIn || isLoggedOut || isDashboard || isAppointment || isConfirmation) && !page.match(/^\/en-/),
             usageConsent = await chrome.storage.local.get("__uc").then(({ __uc }) => __uc),
-            __nv3 = await chrome.storage.local.get("__nv3").then(({ __nv3 }) => __nv3),
-            __nv3two = await chrome.storage.local.get("__nv3two").then(({ __nv3two }) => __nv3two),
-            __nv341 = await chrome.storage.local.get("__nv341").then(({ __nv341 }) => __nv341),
-            __tk = await chrome.storage.local.get("__tk").then(({ __tk }) => __tk),
             immigrationTypeSelected = await chrome.storage.local.get("__it").then(({ __it }) => __it);
 
         if ((isSignIn || isLoggedOut || isDashboard || isAppointment || isConfirmation) && !immigrationTypeSelected)
@@ -300,70 +220,14 @@
         if ((isSignIn || isDashboard || isAppointment) && !usageConsent) {
             await Swal.fire({
                 title: "Extension Usage Guidelines",
-                html: "<p>This extension is designed to be used by individuals who already have appointment and are looking to move their appointment date ahead.</p><p>There have been reports that certain embassies have limited the number of times you can reschedule. <strong>Version 3.0.0</strong> is released to enable you to check within a specific date range because of this.<br><br>If you see a message from this portal informing you that you can only reschedule certain number of times, it is recommended to stop using the extension. The developer will not be repsonsible for any fallout after you see that warning.</p>",
+                html: "<p>This extension is designed to be used by individuals who already have appointment and are looking to move their appointment date ahead.</p><p>There have been reports that certain embassies have limited the number of times you can reschedule.</p>",
                 icon: "warning",
-                confirmButtonText: "I consent to use this extension within it's limits",
+                confirmButtonText: "I understand",
                 allowEscapeKey: false,
                 allowEnterKey: false,
                 allowOutsideClick: false,
             }).then(() => {
                 return chrome.storage.local.set({ "__uc": true });
-            });
-        }
-
-        if ((isSignIn || isDashboard || isAppointment) && !__nv3) {
-            await Swal.fire({
-                title: "v3.0.0 Read Carefully",
-                html: "<p>This version of the extension allows you to set a date range for the extension to check for slots in the settings. Ignore the below message if you just installed the extension.<br><br><strong>For people upgrading, it is strongly recommended to reset the extension by clicking on the \"Configure / Reset\" button in the settings. If you have already reset it, you can proceed.</strong></p>",
-                icon: "warning",
-                confirmButtonText: "Yes. I reset the extension.",
-                allowEscapeKey: false,
-                allowEnterKey: false,
-                allowOutsideClick: false,
-            }).then(() => {
-                return chrome.storage.local.set({ "__nv3": true });
-            });
-        }
-
-        if ((isSignIn || isDashboard || isAppointment) && !__nv3two) {
-            await Swal.fire({
-                title: "v3.2.0 Read Carefully",
-                html: "<p>This version of the extension allows you to set a frequency of check anywhere between 30 seconds and 2 hours. Please set it between 1 to 2 minutes for best outcomes.</strong></p><p>Also, the new donation option via PayPal is added.</p>",
-                icon: "warning",
-                confirmButtonText: "Understood.",
-                allowEscapeKey: false,
-                allowEnterKey: false,
-                allowOutsideClick: false,
-            }).then(() => {
-                return chrome.storage.local.set({ "__nv3two": true });
-            });
-        }
-
-        if ((isSignIn || isDashboard || isAppointment) && !__nv341) {
-            await Swal.fire({
-                title: "v3.4.1 Major Update Coming Soon",
-                html: "<p>Hello. A new 4.0 update will be launched very soon. The new version will allow to change cities without logging out and provide support in 9 addtional languages <i>[中国人, فارسی, Français, Deutsch, Italiano, Português, Русский, Español and Türkçe]</i> and also increases the speed of the extension. I'm completing the final testing of this new version.</p><p><b>When the v4.0 version is installed, you will be forced to re-login. Exciting times ahead.</b>🥳</p>",
-                icon: "warning",
-                confirmButtonText: "Understood.",
-                allowEscapeKey: false,
-                allowEnterKey: false,
-                allowOutsideClick: false,
-            }).then(() => {
-                return chrome.storage.local.set({ "__nv341": true });
-            });
-        }
-
-        if ((isSignIn || isDashboard || isAppointment) && !__tk) {
-            await Swal.fire({
-                title: "Attention Users from Turkey",
-                html: "<p>Hello. I have been made aware that Turkish locations will start using a new tool for appointments sometime in May. At this point, I do not have more information about this. Unfortunately, my extension will no longer work once Turkish locations transition to the new tool.</p><p>It has been a pleasure helping you improve your appointment timelines for the last two years. Please feel free to use the extension as long as it works. 🫡</p>",
-                icon: "warning",
-                confirmButtonText: "Understood.",
-                allowEscapeKey: false,
-                allowEnterKey: false,
-                allowOutsideClick: false,
-            }).then(() => {
-                return chrome.storage.local.set({ "__tk": true });
             });
         }
 
@@ -615,33 +479,7 @@
                 });
             })($end);
 
-            return fetch(`${$host}/get-config?email=${encodeURIComponent($username)}&version=${$version}`)
-                .then(async res => {
-                    if (!res.ok) throw await res.text();
-                    return await res.json();
-                })
-                .then(data => {
-                    chrome.storage.local.set({ __cr: data.__cr });
-                    chrome.storage.local.set({ __pl: data.__pl });
-                    $host = data.__host;
-                    $to = data.__to;
-                    $pl = data.__pl;
-                    $sync = data.__sync;
-                    $resets = data.__resets;
-                })
-                .then(data => sync())
-                .then(data => getNewDate(0, $apptCenter, $ascCenter))
-                .catch(e => {
-                    Swal.fire({
-                        title: "Attention please.",
-                        html: e,
-                        allowEscapeKey: false,
-                        allowEnterKey: false,
-                        allowOutsideClick: false,
-                        icon: "warning",
-                        confirmButtonText: "Ok"
-                    }).then(d => location.href = page.replace(/\/schedule.*/g, "/users/sign_out"))
-                });
+            getNewDate(0, $apptCenter, $ascCenter);
         } else if (isConfirmation) {
             await delay(10 * 1000);
             location = page.replace(/schedule.*/g, "");

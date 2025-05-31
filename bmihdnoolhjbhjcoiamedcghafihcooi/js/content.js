@@ -6,21 +6,15 @@
     await chrome.storage.local.get().then(items => {
         document.getElementById("activate").checked = items["__ap"];
         document.getElementById("autobook").checked = items["__ab"];
-        document.getElementById("credits").innerText = items["__cr"] || "--";
         document.getElementById("frequency").value = items["__fq"] || 1;
         document.getElementById("checkfrequency").innerText = items["__fq"] || 2;
         document.getElementById("gap").value = items["__gp"] || 3;
         document.getElementById("daygap").innerText = items["__gp"] || 3;
         document.getElementById("start").value = items["__st"] || new Date().toISOString().split('T')[0];
         document.getElementById("end").value = items["__en"] || "";
-		document.getElementById("payment_link").href = items["__pl"] || "#";
-		document.getElementById("payment_link").style.display = !items["__pl"] ? "none" : "";
     })
 
     chrome.storage.onChanged.addListener(async(changes, area) => {
-        if (changes.__cr)
-            document.getElementById("credits").innerText = changes.__cr.newValue;
-
         if (changes.__fq)
             document.getElementById("checkfrequency").innerText = changes.__fq.newValue;
 
@@ -95,7 +89,7 @@
         await new Promise(r => setTimeout(r, 500));
 
         await chrome.storage.local.clear();
-        await chrome.storage.local.set({ __ab: false, __ap: true, __cr: 0, __fq: 1, __gp: 7 });
+        await chrome.storage.local.set({ __ab: false, __ap: true, __fq: 1, __gp: 7 });
 
         let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
         await chrome.tabs.sendMessage(tab.id, { action: "logout" });
